@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  terraform-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,23 +21,12 @@ jobs:
           cd terraform
           terraform init
 
-      - name: Terraform Apply
+      - name: Terraform Validate
         run: |
           cd terraform
-          terraform apply -auto-approve
+          terraform validate
 
-  destroy:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Destroy
+      - name: Terraform Plan
         run: |
           cd terraform
-          terraform destroy -auto-approve
+          terraform plan
